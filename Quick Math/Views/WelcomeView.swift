@@ -33,17 +33,9 @@ struct WelcomeView: View {
                     Spacer()
                     
                     NavigationLink {
-                        GameView()
+                        GameView() //change to CustomGame() when it is finished
                     } label: {
-                        HStack {
-                            Spacer()
-                            Text("Start")
-                                .font(.body)
-                                .bold()
-                                .padding()
-                            Spacer()
-                        }
-                        .background(GameColor.accentColor)
+                        BottomTextView(str: "Start")
                     }
                 } //Vstack
                 .foregroundColor(.white)

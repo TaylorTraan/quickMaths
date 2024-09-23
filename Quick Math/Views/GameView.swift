@@ -9,45 +9,42 @@ import SwiftUI
 
 struct GameView: View {
     //HERE WE ADD OUR CONSTANTS FOR THE APP
-    @State private var mainColor = GameColor.mainColor
-    
-    let question = Question(questionText: "What was the first computer bug?", possibleAnswers: ["Ant", "Moth", "Fly", "Beetle"], correctAnswerIndex: 1)
+    @StateObject var viewModel = GameViewModel() //the brains of our GameView
     
     //Body is what we'll add to the screen
     var body: some View {
         ZStack{
-            mainColor.ignoresSafeArea()
+            GameColor.mainColor.ignoresSafeArea()
             VStack {
-                Text("1 of 10")
+                Text(viewModel.questionProgressText)
                     .font(.callout)
                     .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
                     .padding()
-                Text(question.questionText)
-                    .font(.largeTitle)
-                    .bold()
-                    .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
             
                 Spacer() //pushes text to the top of the Vstack
                 
-                HStack {
-                    //ForEach loop to create buttons because every new view(button) must have unique identifier
-                    ForEach(0..<question.possibleAnswers.count, id: \.self) { answerIndex in
-                        Button {
-                            print("Tapped on Choice \(answerIndex) : \(question.possibleAnswers[answerIndex])")
-                            mainColor = answerIndex == question.correctAnswerIndex ? .green : .red
-                        } label: {
-                            ChoiceTextView(choiceText: question.possibleAnswers[answerIndex])
-                        }
-                    }
-                } //end of Hstack
+                QuestionView(question: viewModel.currentQuestion)
                 
                 
             } //End of Vstack
             .foregroundColor(Color.white)
-        } //End of Hstack
+            .navigationBarHidden(true)
+            .environmentObject(viewModel)
+        } //End of Zstack
+        .background(
+            NavigationLink(destination: ScoreView(viewModel: ScoreViewModel(correctGuesses: viewModel.correctGuesses,
+                                                                            incorrectGuesses: viewModel.incorrectGuesses)),
+            isActive: .constant(viewModel.gameIsOver)
+            , label: {EmptyView()}
+                          ) //destination: This is where the application will navigate to when the game is over
+                            //isActive: This configures the navigationLink to monitor the new gameIsOver property you added to the GameViewModel.  When the game is over, the constant is true and the scoreview will be presented
+                            //label: The label is assigned to a special view EmptyView.  Does not display anything to the screen so the player does not see the navigation at all, the NavigationLink observes invisibly from the background
+        )
     }
 }
 
-#Preview {
-    GameView()
+struct GameView_preview: PreviewProvider {
+    static var previews: some View {
+        GameView()
+    }
 }
