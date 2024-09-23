@@ -11,7 +11,13 @@ import SwiftUI
 struct Quick_MathApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            WelcomeView()
         }
+    }
+}
+
+struct app_preview: PreviewProvider {
+    static var previews: some View {
+        WelcomeView()
     }
 }
