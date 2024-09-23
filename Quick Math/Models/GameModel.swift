@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Game {
+struct GameModel {
     
     private let questions: [Question] = Question.allQuestions.shuffled()
     private(set) var guesses: [Question: Int] = [:]

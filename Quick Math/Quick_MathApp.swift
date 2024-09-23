@@ -16,8 +16,3 @@ struct Quick_MathApp: App {
     }
 }
 
-struct app_preview: PreviewProvider {
-    static var previews: some View {
-        WelcomeView()
-    }
-}
